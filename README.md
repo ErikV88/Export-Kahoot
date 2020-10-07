@@ -1,7 +1,7 @@
 # Export Kahoot
  Python Export Kahoot by id to .csv file.
 
-## Find Kahoot id
+## Find Kahoot ID
 ![Kahoot-ID](Screenshots/id.jpg)
 
 
