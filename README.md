@@ -3,4 +3,4 @@
 
 
 ## Screenshot
-![Export](Screenshots/screen.job)
+![Export-Kahoot](Screenshots/screen.jpg)
