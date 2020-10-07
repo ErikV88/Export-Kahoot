@@ -1,2 +1,6 @@
 # Export Kahoot
- Export Kahoot by id
+ Python Export Kahoot by id to .csv file.
+
+
+## Screenshot
+![Export](Screenshots/screen.job)
