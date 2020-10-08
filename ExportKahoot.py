@@ -9,6 +9,21 @@ class Questions:
     def add(self,question):
         self.questions.append(question)
 
+
+    def __str__(self):
+        r='\n'
+        r+='Questions:\n'
+        for q in self.questions:
+            r+='\n'+q.question + '\n'
+            
+            r+='  Alternatives:'+ '\n'
+            for a in q.alternatives:
+                r+='     ' + str(a).replace('[','').replace(']','') + '\n'
+        r+='\n\n'
+        return r
+
+
+
     def toExel(self,filename):
         rows=[]
         for q in self.questions:
@@ -33,10 +48,9 @@ class Question:
 
 
 class ExportKahoot:
-    api_auth=' https://create.kahoot.it/rest/authenticate'
-    api_url='https://create.kahoot.it/rest/kahoots/%s/card/?includeKahoot=true'
+    api_auth_url=' https://create.kahoot.it/rest/authenticate'
+    api_items_url='https://create.kahoot.it/rest/kahoots/%s/card/?includeKahoot=true'
     cookies=None
-    csv_filename=''
 
     def __init__(self):
         self.username=input('Kahoot User Name:')
@@ -47,13 +61,21 @@ class ExportKahoot:
     def auth(self):
         session = requests.Session()
         myobj={"username":self.username,"password":self.password,"grant_type":"password"}
-        response = session.post(self.api_auth, data = myobj)
+        response = session.post(self.api_auth_url, data = myobj)
         self.cookies=session.cookies.get_dict()
 
     def export(self):
         id=input('What ID?:')
         headers = {'content-type': 'application/json'}
-        kahoot=json.loads(requests.get(self.api_url%(id),headers=headers,cookies=self.cookies).text.encode("utf-8"))['kahoot']        
+        kahoot=None
+        try:
+            kahoot=json.loads(requests.get(self.api_items_url%(id),headers=headers,cookies=self.cookies).text.encode("utf-8"))['kahoot']        
+        except:
+            print('wrong id')
+            self=ExportKahoot()
+            self.export()
+            return
+
         questions=kahoot['questions']
         filename='%s.csv'%(str(kahoot['title']).replace(' ',''))
 
@@ -96,7 +118,10 @@ class ExportKahoot:
             questions_out.add(question)
 
 
+        print(str(questions_out))
+        print('---------------------')
         questions_out.toExel(filename)
+        print('---------------------')
 
         print('Kahoot is exported to same folder: ' + os.getcwd())
 
