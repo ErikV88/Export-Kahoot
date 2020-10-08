@@ -112,7 +112,6 @@ class ExportKahoot:
                 except:
                     choices=[]
 
-
                
             question=Question(question_string,choices_obj)
             questions_out.add(question)
